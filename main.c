@@ -26,6 +26,14 @@ void add_node(int value, node *set_i) {
     set_i->next = next_node; // создаем указатель на следующий узел
 }
 
+void destroy(node *set_i) {
+    while (set_i != NULL) {
+        free(set_i);
+        set_i = set_i->next;
+    }
+    puts("\nSet's memory cleared!");
+}
+
 // тест на число в двоичной системе счисления
 bool test_double(int test_value) {
     for (int i = 0; test_value >= 1; ++i) {
@@ -63,7 +71,6 @@ node *to_decimal(node *set_double) {
         if (set_decimal == NULL) {
             set_decimal = init_set(summ);
             set_double = set_double->next;
-            /*set_decimal = set_decimal->next;*/
         } else {
             add_node(summ, set_decimal);
             set_double = set_double->next;
@@ -112,6 +119,10 @@ int main() {
         puts("\nМножество чисел в десятичной системе.");
         node *set_decimal = to_decimal(set_double);
         print_set(set_decimal);
+
+        // освобождаем память
+        destroy(set_double);
+        destroy(set_decimal);
     }
     return 0;
 }
