@@ -21,17 +21,30 @@ void add_node(int value, node *set_i) {
     while (set_i->next != NULL) {        // перемещаемся в начало списка
         set_i = set_i->next;
     }
-    node *next_node = (node *) malloc(sizeof(node)); // выделяем память под следующий узел
-    next_node->value = value;
-    set_i->next = next_node; // создаем указатель на следующий узел
+   set_i->next = (node *) malloc(sizeof(node));
+   set_i->next->next = NULL;
+   set_i->next->value = value;
 }
 
-void destroy(node *set_i) {
-    while (set_i != NULL) {
+// удаление узла множества
+node *destroy_node(node *set_i) {
+    node *temp = set_i;
+    if (set_i == NULL)
+        return NULL;
+    if (set_i->next == NULL) {
+        printf("\nDeleted! %d\n", set_i->value);
         free(set_i);
-        set_i = set_i->next;
+        return NULL;
     }
-    puts("\nSet's memory cleared!");
+    else {
+        while (set_i->next->next != NULL) {
+            set_i = set_i->next;
+        }
+        printf("\nDeleted! %d\n", set_i->next->value);
+        free(set_i->next);
+        set_i->next = NULL;
+    }
+    return temp;
 }
 
 // тест на число в двоичной системе счисления
@@ -121,8 +134,10 @@ int main() {
         print_set(set_decimal);
 
         // освобождаем память
-        destroy(set_double);
-        destroy(set_decimal);
+        while(set_double != NULL){
+            set_double = destroy_node(set_double);
+            set_decimal = destroy_node(set_decimal);
+        }
     }
     return 0;
 }
