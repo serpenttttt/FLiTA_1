@@ -21,34 +21,25 @@ void add_node(int value, node *set_i) {
     while (set_i->next != NULL) {        // перемещаемся в начало списка
         set_i = set_i->next;
     }
-   set_i->next = (node *) malloc(sizeof(node));
-   set_i->next->next = NULL;
-   set_i->next->value = value;
+    set_i->next = (node *) malloc(sizeof(node));
+    set_i->next->next = NULL;
+    set_i->next->value = value;
 }
 
 // удаление узла множества
-node *destroy_node(node *set_i) {
-    node *temp = set_i;
-    if (set_i == NULL)
-        return NULL;
-    if (set_i->next == NULL) {
+void destroy_nodes(node *set_i) {
+    if (set_i == NULL) return;
+    if (set_i->next != NULL) {
         printf("\nDeleted! %d\n", set_i->value);
-        free(set_i);
-        return NULL;
+        set_i = set_i->next;
+        destroy_nodes(set_i->next);
     }
-    else {
-        while (set_i->next->next != NULL) {
-            set_i = set_i->next;
-        }
-        printf("\nDeleted! %d\n", set_i->next->value);
-        free(set_i->next);
-        set_i->next = NULL;
-    }
-    return temp;
+    printf("\nDeleted! %d\n", set_i->value);
+    free(set_i);
 }
 
 // тест на число в двоичной системе счисления
-bool test_double(int test_value) {
+bool binary_number_test(int test_value) {
     for (int i = 0; test_value >= 1; ++i) {
         if ((test_value % 10 != 1) && (test_value % 10 != 0)) {
             return true;
@@ -107,14 +98,14 @@ int main() {
     puts("Введите элемент множества чисел в двоичной системе. \nЧтобы закончить ввод, введите любую букву.");
     while (scanf("%d", &input)) {    // проверка на ввод именно числа, а не других символов
         if (set_double == NULL) {
-            if (input >= 0 && !test_double(input)) {
+            if (input >= 0 && !binary_number_test(input)) {
                 set_double = init_set(input);
             } else {
                 puts("Ошибка.");
             }
         }
         else {
-            if (input >= 0 && !test_double(input) && !compare_with_set_i(input, set_double)) {
+            if (input >= 0 && !binary_number_test(input) && !compare_with_set_i(input, set_double)) {
                 add_node(input, set_double);
             } else {
                 puts("Ошибка.");
@@ -134,10 +125,9 @@ int main() {
         print_set(set_decimal);
 
         // освобождаем память
-        while(set_double != NULL){
-            set_double = destroy_node(set_double);
-            set_decimal = destroy_node(set_decimal);
-        }
+        destroy_nodes(set_double);
+        destroy_nodes(set_decimal);
+
     }
     return 0;
 }
