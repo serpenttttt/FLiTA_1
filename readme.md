@@ -6,6 +6,10 @@ select elements from two sets.
 ```
 # Building the Project with CMake
 
+## Install CMake from
+
+``` https://cmake.org/download/ ```
+
 ## Cloning the Repository
 
 Before start clone the repository to your local computer
