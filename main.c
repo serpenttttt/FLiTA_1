@@ -9,24 +9,15 @@ typedef struct node {
     struct node *next;
 } node; // создаем тип данных node на основе узлов
 
-// функция инициализации множества
-node *init_set() {
-    node *first = (node *) malloc(sizeof(node));
-    first->next = NULL;
-    return first;
-}
-
 // функция добавления узла в множество
-void add_node(int value, node *set_i) {
-    while (set_i->next != NULL) {        // перемещаемся в начало списка
-        set_i = set_i->next;
-    }
-    set_i->value = value;
-    set_i->next = (node *) malloc(sizeof(node));
-    set_i->next->next = NULL;
+void add_node(int value, node **set_i) {
+    node *tmp = (node *) malloc(sizeof (node));
+    tmp->value = value;
+    tmp->next = *set_i;
+    *set_i = tmp;
 }
 
-// удаление узла множества
+// удаление узлов множества
 void destroy_nodes(node *set_i) {
     if (set_i == NULL) return;
     if (set_i->next != NULL) {
@@ -49,7 +40,7 @@ bool binary_number_test(int test_value) {
 
 // тест на одинаковый элемент, который уже есть в множестве
 bool compare_with_set_i(int same_value, node *set_i) {
-    while (set_i->next != NULL) {
+    while (set_i != NULL) {
         if (same_value == set_i->value) {
             return true;
         }
@@ -59,26 +50,24 @@ bool compare_with_set_i(int same_value, node *set_i) {
 }
 
 // функция для перевода множества в двоичной системе счиления в множество в десятичной системе счисления
-node *to_decimal(node *set_double) {
-    node *set_decimal = init_set();
+void to_decimal(node *set_double, node **set_decimal) {
     int summ, number, length;
-    while (set_double->next != NULL) {
-        number = set_double->value;
+    number = set_double->value;
+    if (set_double != NULL) {
+        set_double = set_double->next;
+        if (set_double != NULL) to_decimal(set_double, set_decimal);
         summ = 0;
         for (length = 0; number >= 1; ++length) {
-            summ += (number % 10) *
-                    (1 << length); // второй множитель - альтернатива pow(2, length) - возведение в степень length
+            summ += (number % 10) * (1 << length); // второй множитель - альтернатива pow(2, length) - возведение в степень length
             number /= 10;
         }
         add_node(summ, set_decimal);
-        set_double = set_double->next;
     }
-    return set_decimal;
 }
 
 // функция вывода множества
 void print_set(node *set_i) {
-    while (set_i->next != NULL) {
+    while (set_i != NULL) {
         printf("%d ", set_i->value);
         set_i = set_i->next;
     }
@@ -86,12 +75,12 @@ void print_set(node *set_i) {
 
 int main() {
     setlocale(LC_ALL, ".1251"); // устанавливает параметры для русского языка
-    node *set_double = init_set();
+    node *set_double = NULL;
     int input;
     puts("Введите элемент множества чисел в двоичной системе. \nЧтобы закончить ввод, введите любую букву.");
     while (scanf("%d", &input)) {    // проверка на ввод именно числа, а не других символов
         if (input >= 0 && !binary_number_test(input) && !compare_with_set_i(input, set_double)) {
-            add_node(input, set_double);
+            add_node(input, &set_double);
         } else {
             printf("Ошибка. ");
         }
@@ -106,7 +95,8 @@ int main() {
 
         // перевод множества 1 в множество 2, вывод множества 2
         puts("\nМножество чисел в десятичной системе.");
-        node *set_decimal = to_decimal(set_double);
+        node *set_decimal = NULL;
+        to_decimal(set_double, &set_decimal);
         print_set(set_decimal);
 
         // освобождаем память
