@@ -3,13 +3,13 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-// структура узла
+// СЃС‚СЂСѓРєС‚СѓСЂР° СѓР·Р»Р°
 typedef struct node {
-    int value;  // значение, которое содержит узел
+    int value;  // Р·РЅР°С‡РµРЅРёРµ, РєРѕС‚РѕСЂРѕРµ СЃРѕРґРµСЂР¶РёС‚ СѓР·РµР»
     struct node *next;
-} node; // создаем тип данных node на основе узлов
+} node; // СЃРѕР·РґР°РµРј С‚РёРї РґР°РЅРЅС‹С… node РЅР° РѕСЃРЅРѕРІРµ СѓР·Р»РѕРІ
 
-// функция добавления узла в множество
+// С„СѓРЅРєС†РёСЏ РґРѕР±Р°РІР»РµРЅРёСЏ СѓР·Р»Р° РІ РјРЅРѕР¶РµСЃС‚РІРѕ
 void add_node(int value, node **set_i) {
     node *tmp = (node *) malloc(sizeof (node));
     tmp->value = value;
@@ -17,7 +17,7 @@ void add_node(int value, node **set_i) {
     *set_i = tmp;
 }
 
-// удаление узлов множества
+// СѓРґР°Р»РµРЅРёРµ СѓР·Р»РѕРІ РјРЅРѕР¶РµСЃС‚РІР°
 void destroy_nodes(node *set_i) {
     if (set_i == NULL) return;
     if (set_i->next != NULL) {
@@ -27,7 +27,7 @@ void destroy_nodes(node *set_i) {
     free(set_i);
 }
 
-// тест на число в двоичной системе счисления
+// С‚РµСЃС‚ РЅР° С‡РёСЃР»Рѕ РІ РґРІРѕРёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ СЃС‡РёСЃР»РµРЅРёСЏ
 bool binary_number_test(int test_value) {
     for (int i = 0; test_value >= 1; ++i) {
         if ((test_value % 10 != 1) && (test_value % 10 != 0)) {
@@ -38,7 +38,7 @@ bool binary_number_test(int test_value) {
     return false;
 }
 
-// тест на одинаковый элемент, который уже есть в множестве
+// С‚РµСЃС‚ РЅР° РѕРґРёРЅР°РєРѕРІС‹Р№ СЌР»РµРјРµРЅС‚, РєРѕС‚РѕСЂС‹Р№ СѓР¶Рµ РµСЃС‚СЊ РІ РјРЅРѕР¶РµСЃС‚РІРµ
 bool compare_with_set_i(int same_value, node *set_i) {
     while (set_i != NULL) {
         if (same_value == set_i->value) {
@@ -49,7 +49,7 @@ bool compare_with_set_i(int same_value, node *set_i) {
     return false;
 }
 
-// функция для перевода множества в двоичной системе счиления в множество в десятичной системе счисления
+// С„СѓРЅРєС†РёСЏ РґР»СЏ РїРµСЂРµРІРѕРґР° РјРЅРѕР¶РµСЃС‚РІР° РІ РґРІРѕРёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ СЃС‡РёР»РµРЅРёСЏ РІ РјРЅРѕР¶РµСЃС‚РІРѕ РІ РґРµСЃСЏС‚РёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ СЃС‡РёСЃР»РµРЅРёСЏ
 void to_decimal(node *set_double, node **set_decimal) {
     int summ, number, length;
     number = set_double->value;
@@ -58,14 +58,14 @@ void to_decimal(node *set_double, node **set_decimal) {
         if (set_double != NULL) to_decimal(set_double, set_decimal);
         summ = 0;
         for (length = 0; number >= 1; ++length) {
-            summ += (number % 10) * (1 << length); // второй множитель - альтернатива pow(2, length) - возведение в степень length
+            summ += (number % 10) * (1 << length); // РІС‚РѕСЂРѕР№ РјРЅРѕР¶РёС‚РµР»СЊ - Р°Р»СЊС‚РµСЂРЅР°С‚РёРІР° pow(2, length) - РІРѕР·РІРµРґРµРЅРёРµ РІ СЃС‚РµРїРµРЅСЊ length
             number /= 10;
         }
         add_node(summ, set_decimal);
     }
 }
 
-// функция вывода множества
+// С„СѓРЅРєС†РёСЏ РІС‹РІРѕРґР° РјРЅРѕР¶РµСЃС‚РІР°
 void print_set(node *set_i) {
     while (set_i != NULL) {
         printf("%d ", set_i->value);
@@ -74,35 +74,35 @@ void print_set(node *set_i) {
 }
 
 int main() {
-    setlocale(LC_ALL, ".1251"); // устанавливает параметры для русского языка
+    setlocale(LC_ALL, ".1251"); // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
     node *set_double = NULL;
     int input;
-    puts("Введите элемент множества чисел в двоичной системе. \nЧтобы закончить ввод, введите любую букву.");
-    while (scanf("%d", &input)) {    // проверка на ввод именно числа, а не других символов
+    puts("Р’РІРµРґРёС‚Рµ СЌР»РµРјРµРЅС‚ РјРЅРѕР¶РµСЃС‚РІР° С‡РёСЃРµР» РІ РґРІРѕРёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ. \nР§С‚РѕР±С‹ Р·Р°РєРѕРЅС‡РёС‚СЊ РІРІРѕРґ, РІРІРµРґРёС‚Рµ Р»СЋР±СѓСЋ Р±СѓРєРІСѓ.");
+    while (scanf("%d", &input)) {    // РїСЂРѕРІРµСЂРєР° РЅР° РІРІРѕРґ РёРјРµРЅРЅРѕ С‡РёСЃР»Р°, Р° РЅРµ РґСЂСѓРіРёС… СЃРёРјРІРѕР»РѕРІ
         if (input >= 0 && !binary_number_test(input) && !compare_with_set_i(input, set_double)) {
             add_node(input, &set_double);
         } else {
-            printf("Ошибка. ");
+            printf("РћС€РёР±РєР°. ");
         }
-        puts("Введите элемент множества чисел в двоичной системе.");
+        puts("Р’РІРµРґРёС‚Рµ СЌР»РµРјРµРЅС‚ РјРЅРѕР¶РµСЃС‚РІР° С‡РёСЃРµР» РІ РґРІРѕРёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ.");
     }
 
     if (set_double != NULL) {
 
-        // вывод множества 1
-        puts("\nМножество чисел в двоичной системе.");
+        // РІС‹РІРѕРґ РјРЅРѕР¶РµСЃС‚РІР° 1
+        puts("\nРњРЅРѕР¶РµСЃС‚РІРѕ С‡РёСЃРµР» РІ РґРІРѕРёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ.");
         print_set(set_double);
 
-        // перевод множества 1 в множество 2, вывод множества 2
-        puts("\nМножество чисел в десятичной системе.");
+        // РїРµСЂРµРІРѕРґ РјРЅРѕР¶РµСЃС‚РІР° 1 РІ РјРЅРѕР¶РµСЃС‚РІРѕ 2, РІС‹РІРѕРґ РјРЅРѕР¶РµСЃС‚РІР° 2
+        puts("\nРњРЅРѕР¶РµСЃС‚РІРѕ С‡РёСЃРµР» РІ РґРµСЃСЏС‚РёС‡РЅРѕР№ СЃРёСЃС‚РµРјРµ.");
         node *set_decimal = NULL;
         to_decimal(set_double, &set_decimal);
         print_set(set_decimal);
 
-        // освобождаем память
+        // РѕСЃРІРѕР±РѕР¶РґР°РµРј РїР°РјСЏС‚СЊ
         destroy_nodes(set_double);
         destroy_nodes(set_decimal);
-        puts("\nПамять очищена!");
+        puts("\nРџР°РјСЏС‚СЊ РѕС‡РёС‰РµРЅР°!");
 
     }
     return 0;
